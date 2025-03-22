@@ -1,0 +1,72 @@
+  Private Sub Pd_BeginPrint1(ByVal sender As Object, ByVal e As System.Drawing.Printing.PrintEventArgs) Handles Pd.BeginPrint
+        Dim pagesetup As New PageSettings
+        pagesetup.PaperSize = New PaperSize("Custom", 250, 500)
+        Pd.DefaultPageSettings = pagesetup
+    End Sub
+
+    Private Sub Pd_Print(ByVal sender As System.Object, ByVal e As System.Drawing.Printing.PrintPageEventArgs) Handles Pd.PrintPage
+        Dim f8 As New Font("Calibri", 8, FontStyle.Regular)
+        Dim f10 As New Font("Calibri", 10, FontStyle.Regular)
+        Dim f10b As New Font("Calibri", 10, FontStyle.Bold)
+        Dim f14 As New Font("Calibri", 14, FontStyle.Bold)
+
+        Dim leftmargin As New Integer
+        Dim centermargin As New Integer
+        Dim rightmargin As New Integer
+        centermargin = Pd.DefaultPageSettings.PaperSize.Width / 2
+        leftmargin = Pd.DefaultPageSettings.Margins.Left
+        rightmargin = Pd.DefaultPageSettings.PaperSize.Width
+        'font alignment
+        Dim rightas As New StringFormat
+        Dim center As New StringFormat
+        rightas.Alignment = StringAlignment.Far
+        center.Alignment = StringAlignment.Center
+
+        Dim line As String
+        line = "---------------------------------------------------------------------------"
+
+        e.Graphics.DrawString("MUSIC CAFE", f14, Brushes.Black, centermargin, 2, center)
+        e.Graphics.DrawString("ANAND,GUJRAT", f10, Brushes.Black, centermargin, 30, center)
+        e.Graphics.DrawString("tel + 7698580673", f8, Brushes.Black, centermargin, 45, center)
+
+        e.Graphics.DrawString("Id", f8, Brushes.Black, 0, 60)
+        e.Graphics.DrawString(":", f10, Brushes.Black, 50, 60)
+        e.Graphics.DrawString("HST230011", f8, Brushes.Black, 70, 60)
+
+        e.Graphics.DrawString("Cashier", f8, Brushes.Black, 0, 75)
+        e.Graphics.DrawString(":", f10, Brushes.Black, 50, 75)
+        e.Graphics.DrawString("SHRVAN", f8, Brushes.Black, 70, 75)
+
+        ' e.Graphics.DrawString("07/28/2023 | (18.00)", f8, Brushes.Black, 0, 90)
+
+        e.Graphics.DrawString(line, f8, Brushes.Black, 0, 100)
+
+        e.Graphics.DrawString("Qty", f10b, Brushes.Black, 90, 90)
+
+        Dim height As New Integer 'dgv postion
+        Dim i As Long
+
+        billDGV.AllowUserToAddRows = False
+        For row As Integer = 0 To billDGV.RowCount - 1
+            height += 15
+            e.Graphics.DrawString(billDGV.Rows(row).Cells(1).Value.ToString, f10, Brushes.Black, 0, 100 + height)
+            e.Graphics.DrawString(billDGV.Rows(row).Cells(3).Value.ToString, f10, Brushes.Black, 100, 100 + height)
+            i = billDGV.Rows(row).Cells(2).Value
+            billDGV.Rows(row).Cells(1).Value = Format(i, "##,##0")
+            e.Graphics.DrawString(billDGV.Rows(row).Cells(2).Value.ToString, f10, Brushes.Black, rightmargin, 100 + height, rightas)
+        Next
+        Dim hights2 As Integer
+        bTotal()
+        hights2 = 110 + height
+        e.Graphics.DrawString(line, f8, Brushes.Black, 0, hights2)
+        e.Graphics.DrawString("Total : " & Format(total, "##,##0"), f10b, Brushes.Black, rightmargin, 15 + hights2, rightas)
+        ' e.Graphics.DrawString("Qty", f10b, Brushes.Black, 90, 15 + hights2)
+
+        e.Graphics.DrawString("Thanks for Shopping", f10, Brushes.Black, centermargin, 40 + hights2, center)
+        e.Graphics.DrawString("MUSIC CAFE", f10, Brushes.Black, centermargin, 55 + hights2, center)
+    End Sub
+    Dim total As Integer
+    Sub bTotal()
+
+        total = lbl_total.Text
+    End Sub

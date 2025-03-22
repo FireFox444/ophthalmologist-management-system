@@ -1,0 +1,17 @@
+Imports System.Data.SqlClient
+Public Class Patients
+    Dim Con As New SqlConnection("Data Source=.\SQLEXPRESS;AttachDbFilename=D:\PROJECT 2023-24\login\login\Eyedb.mdf;Integrated Security=True;User Instance=True")
+    Dim cmd As SqlCommand
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        If PatNameTb.Text = "" Or PatAddTb.Text = "" Or PatPhoneTb.Text = "" Or AllerginTb.Text = "" Or GenCb.SelectedIndex = -1 Then
+            MsgBox("Missing Information")
+        Else
+            Con.Open()
+            Dim query = "insert into PatientTbl values('" + PatNameTb.Text + "," + PatPhoneTb.Text + "," + PatAddTb.Text + "," + DOBDate.Value.Date + "," + GenCb.SelectedItem.ToString() + "," + AllerginTb.Text + ",')"
+            Dim cmd As New SqlCommand(query, Con)
+            cmd.ExecuteNonQuery()
+            MsgBox("Patient Save Successfully")
+            Con.Close()
+        End If
+    End Sub
+End Class

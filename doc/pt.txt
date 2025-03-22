@@ -1,0 +1,75 @@
+Imports System.Data.SqlClient
+
+Public Class Form1
+    Dim con As New SqlConnection("Data Source=.\SQLEXPRESS;AttachDbFilename=C:\Users\Krushal Gohel\AppData\Local\Temporary Projects\Patient\DentalDB.mdf;Integrated Security=True;User Instance=True")
+    Dim cmd As SqlCommand
+
+    Private Sub TextBox3_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Dim Name As String
+        Dim Address As String
+        Dim DOB As String
+        Dim Age As Integer
+        Dim Mobile As String
+
+        Name = tb_name.Text
+        Address = tb_add.Text
+        DOB = DateTimePicker1.Text
+        Age = tb_age.Text
+        Mobile = tb_mb.Text
+
+        con.Open()
+        Dim cmd As New SqlCommand("update pt SET Name='" & Name & "',Address='" & Address & "',DOB='" & DOB & "',Age='" & Age & "',Mobile='" & Mobile & "' where Name = '" & Name & "' ", con)
+        cmd.ExecuteNonQuery()
+        MsgBox("Data Updated Succesfully")
+        con.Close()
+        LoadDataInGridView()
+
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim Name As String
+        Dim Address As String
+        Dim DOB As String
+        Dim Age As Integer
+        Dim Mobile As String
+
+        Name = tb_name.Text
+        Address = tb_add.Text
+        DOB = DateTimePicker1.Text
+        Age = tb_age.Text
+        Mobile = tb_mb.Text
+
+        con.Open()
+        Dim cmd As New SqlCommand("insert into pt2 values('" & Name & "','" & Address & "','" & DOB & "','" & Age & "','" & Mobile & "')", con)
+        cmd.ExecuteNonQuery()
+        MsgBox("Data Inserted Succesfully")
+        con.Close()
+        LoadDataInGridview()
+
+
+    End Sub
+    Public Sub LoadDataInGridview()
+        Dim cmd As New SqlCommand("Select * from pt2", con)
+        Dim da As New SqlDataAdapter(cmd)
+        Dim dt As New DataTable()
+        da.Fill(dt)
+        DataGridView1.DataSource = dt
+
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        Dim Name As String = Console.ReadLine
+
+        Name = tb_name.Text
+        con.Open()
+        Dim cmd As New SqlCommand("delete from pt2 where Name='" & Name & "' ", con)
+        cmd.ExecuteNonQuery()
+        MsgBox("Data Deleted Succesfully")
+        con.Close()
+    End Sub
+End Class
